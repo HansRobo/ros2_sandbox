@@ -1,0 +1,53 @@
+name: build test(merge install)
+
+on:
+  workflow_dispatch:
+  pull_request:
+
+jobs:
+  job:
+    name: build_with_merge_install
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    container: ros:${{ matrix.rosdistro }}
+    env:
+      DEBIAN_FRONTEND: noninteractive
+    strategy:
+      fail-fast: false
+      matrix:
+        rosdistro: [jazzy]
+    steps:
+      - name: suppress warnings
+        run: |
+          git config --global --add safe.directory '*'
+
+      - uses: actions/checkout@v4
+
+      - name: Install wget
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y wget libcpprest-dev tree
+
+      - name: Run rosdep install
+        run: |
+          sudo apt-get -yqq update
+          rosdep update
+          rosdep install -yqq --from-paths . --ignore-src --rosdistro ${{ matrix.rosdistro }}
+        shell: bash
+
+      - name: Set up colcon-mixin
+        run: |
+          colcon mixin add default https://raw.githubusercontent.com/colcon/colcon-mixin-repository/master/index.yaml || true
+          colcon mixin update default
+        shell: bash
+
+      - name: Build
+        run: |
+          . /opt/ros/${{ matrix.rosdistro }}/setup.sh
+          colcon build --merge-install --packages-select ament_auto_installed_package
+        shell: bash
+
+      - name: check installed files
+        run: |
+          tree ./install
+        shell: bash
