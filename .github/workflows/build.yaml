@@ -9,19 +9,25 @@ jobs:
     name: build_with_merge_install
     runs-on: ubuntu-latest
     timeout-minutes: 30
-    container: ros:${{ matrix.rosdistro }}
+    container: ros:rollinh
     env:
       DEBIAN_FRONTEND: noninteractive
     strategy:
       fail-fast: false
       matrix:
-        rosdistro: [jazzy]
+        ament_cmake_auto_branch: [rolling, patch-1]
     steps:
       - name: suppress warnings
         run: |
           git config --global --add safe.directory '*'
 
       - uses: actions/checkout@v4
+
+      - uses: actions/checkout@v4
+        with:
+          repository: HansRobo/ament_cmake
+          path: ament_cmake
+          ref: ${{ matrix.ament_cmake_auto_branch }}
 
       - name: Install wget
         run: |
