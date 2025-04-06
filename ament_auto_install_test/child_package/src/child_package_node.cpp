@@ -1,7 +1,7 @@
 
 #include <memory>
 #include <rclcpp/rclcpp.hpp>
-#include <ament_auto_installed_package/test_node.hpp>
+#include <parent_package/test_node.hpp>
 
 int main(int argc, char ** argv)
 {

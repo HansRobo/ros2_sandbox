@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.5)
-project(ament_auto_installed_package)
+project(parent_package)
 
 # Default to C++17
 if(NOT CMAKE_CXX_STANDARD)
