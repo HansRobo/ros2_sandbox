@@ -55,6 +55,7 @@ jobs:
         shell: bash
 
       - name: check installed files
+        if: always()
         run: |
           tree ./install
         shell: bash
