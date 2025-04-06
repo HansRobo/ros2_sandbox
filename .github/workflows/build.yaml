@@ -9,13 +9,14 @@ jobs:
     name: build_with_merge_install
     runs-on: ubuntu-latest
     timeout-minutes: 30
-    container: ros:rolling
+    container: ros:${{ matrix.rosdistro }}
     env:
       DEBIAN_FRONTEND: noninteractive
     strategy:
       fail-fast: false
       matrix:
         ament_cmake_auto_branch: [rolling, patch-1]
+        rosdistro: [rolling]
     steps:
       - name: suppress warnings
         run: |
@@ -38,7 +39,7 @@ jobs:
         run: |
           sudo apt-get -yqq update
           rosdep update
-          rosdep install -yqq --from-paths . --ignore-src --rosdistro rolling
+          rosdep install -yqq --from-paths . --ignore-src --rosdistro ${{ matrix.rosdistro }}
         shell: bash
 
       - name: Set up colcon-mixin
