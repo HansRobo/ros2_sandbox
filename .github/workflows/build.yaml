@@ -51,7 +51,7 @@ jobs:
       - name: Build
         run: |
           . /opt/ros/${{ matrix.rosdistro }}/setup.sh
-          colcon build --merge-install --packages-select ament_auto_installed_package
+          colcon build --merge-install
         shell: bash
 
       - name: check installed files
