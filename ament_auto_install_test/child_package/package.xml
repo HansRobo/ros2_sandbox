@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
 <package format="3">
-  <name>ament_auto_installed_package</name>
+  <name>child_package</name>
   <version>0.0.0</version>
   <description>Apache 2.0</description>
   <maintainer email="pythagora.yoshimoto@gmail.com">hans</maintainer>
@@ -9,7 +9,7 @@
 
   <buildtool_depend>ament_cmake_auto</buildtool_depend>
 
-  <depend>example_interfaces</depend>
+  <depend>parent_package</depend>
   <depend>rclcpp</depend>
 
   <test_depend>ament_lint_auto</test_depend>
