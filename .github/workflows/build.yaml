@@ -15,8 +15,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        ament_cmake_auto_branch: [rolling, patch-1, before_fix_ament_export_include_directories]
-        rosdistro: [rolling]
+        rosdistro: [humble]
     steps:
       - name: suppress warnings
         run: |
@@ -28,7 +27,7 @@ jobs:
         with:
           repository: HansRobo/ament_cmake
           path: ament_cmake
-          ref: ${{ matrix.ament_cmake_auto_branch }}
+          ref: humble_backport_540_fixed
 
       - name: Install wget
         run: |
@@ -40,12 +39,6 @@ jobs:
           sudo apt-get -yqq update
           rosdep update
           rosdep install -yqq --from-paths . --ignore-src --rosdistro ${{ matrix.rosdistro }}
-        shell: bash
-
-      - name: Set up colcon-mixin
-        run: |
-          colcon mixin add default https://raw.githubusercontent.com/colcon/colcon-mixin-repository/master/index.yaml || true
-          colcon mixin update default
         shell: bash
 
       - name: Build
