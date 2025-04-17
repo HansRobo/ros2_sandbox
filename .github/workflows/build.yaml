@@ -27,7 +27,7 @@ jobs:
         with:
           repository: HansRobo/ament_cmake
           path: ament_cmake
-          ref: humble_backport_540_fixed
+          ref: humble_backport_540_fixed_mode_test
 
       - name: Install wget
         run: |
