@@ -16,7 +16,7 @@ public:
       init_options.set_domain_id(domain_id_1);
       context1->init(argc, argv, init_options);
 
-      node1 = std::make_shared<rclcpp::Node>("node_2", rclcpp::NodeOptions().context(context1));
+      node1 = std::make_shared<rclcpp::Node>("node_1", rclcpp::NodeOptions().context(context1));
       publisher1 = node1->create_publisher<std_msgs::msg::String>("topic", 10);
       RCLCPP_INFO(node1->get_logger(), "Node 1 initialized.");
 
