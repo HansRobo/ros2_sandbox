@@ -15,7 +15,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        ament_cmake_auto_branch: [rolling, patch-1, before_fix_ament_export_include_directories]
+        ament_cmake_auto_branch: [rolling, feature/ament_auto_generate_code]
         rosdistro: [rolling]
     steps:
       - name: suppress warnings
