@@ -51,7 +51,7 @@ jobs:
       - name: Build
         run: |
           . /opt/ros/${{ matrix.rosdistro }}/setup.sh
-          colcon build --merge-install
+          colcon build --event-handlers console_direct+
         shell: bash
 
       - name: check installed files
