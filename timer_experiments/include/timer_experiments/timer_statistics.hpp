@@ -8,7 +8,6 @@
 #include <vector>
 #include <iostream>
 #include <chrono>
-#include <../magic_enum.hpp>
 
 
 // enum class DefaultSeries{
@@ -37,7 +36,6 @@ class TimerStatistics {
       return durations;
     }
 
-    // std::vector<std::chrono::time_point> buffer[magic_enum::enum_count<Series>()];
     std::vector<clock_type::time_point> records;
 };
 #endif //REALTIME_BUFFER_HPP
