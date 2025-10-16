@@ -6,7 +6,7 @@ on:
 
 jobs:
   job:
-    name: build_with_merge_install
+    name: build
     runs-on: ubuntu-latest
     timeout-minutes: 30
     container: ros:${{ matrix.rosdistro }}
