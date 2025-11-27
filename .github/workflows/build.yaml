@@ -15,8 +15,8 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        ament_cmake_auto_branch: [rolling, feature/ament_auto_generate_code]
         rosdistro: [rolling]
+        rosidl_branch: [feature/rosidl_auto_generate_interfaces]
     steps:
       - name: suppress warnings
         run: |
@@ -26,9 +26,9 @@ jobs:
 
       - uses: actions/checkout@v4
         with:
-          repository: HansRobo/ament_cmake
-          path: ament_cmake
-          ref: ${{ matrix.ament_cmake_auto_branch }}
+          repository: HansRobo/rosidl
+          path: rosidl
+          ref: ${{ matrix.rosidl_branch }}
 
       - name: Install wget
         run: |
