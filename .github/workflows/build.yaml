@@ -46,7 +46,7 @@ jobs:
       - name: Build
         run: |
           . /opt/ros/${{ matrix.rosdistro }}/setup.sh
-          colcon build --allow-overriding rosidl_cmake --event-handlers console_direct+
+          colcon build --event-handlers console_direct+
         shell: bash
 
       - name: Verify sample_interfaces generated files
