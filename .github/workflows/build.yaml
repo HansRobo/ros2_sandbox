@@ -46,7 +46,38 @@ jobs:
       - name: Build
         run: |
           . /opt/ros/${{ matrix.rosdistro }}/setup.sh
-          colcon build --event-handlers console_direct+
+          colcon build --event-handlers console_direct+ --allow-overriding rosidl_cmake
+        shell: bash
+
+      - name: Verify sample_interfaces generated files
+        run: |
+          echo "Checking generated header files..."
+          ls -lh build/sample_interfaces/rosidl_generator_cpp/sample_interfaces/msg/
+          echo ""
+          echo "Expected files: test.hpp, test_a.hpp, test_b.hpp"
+          test -f build/sample_interfaces/rosidl_generator_cpp/sample_interfaces/msg/test.hpp
+          test -f build/sample_interfaces/rosidl_generator_cpp/sample_interfaces/msg/test_a.hpp
+          test -f build/sample_interfaces/rosidl_generator_cpp/sample_interfaces/msg/test_b.hpp
+          echo "✓ All header files generated successfully"
+        shell: bash
+
+      - name: Verify sample_interfaces executables
+        run: |
+          echo "Checking built executables..."
+          ls -lh install/sample_interfaces/lib/sample_interfaces/
+          echo ""
+          echo "Verifying executables exist..."
+          test -f install/sample_interfaces/lib/sample_interfaces/sample_interfaces_node
+          test -f install/sample_interfaces/lib/sample_interfaces/sample_interfaces_node2
+          test -f install/sample_interfaces/lib/sample_interfaces/sample_interfaces_node_no_targets
+          echo "✓ All executables built successfully"
+        shell: bash
+
+      - name: Verify typesupport linking
+        run: |
+          echo "Checking typesupport library linking..."
+          ldd install/sample_interfaces/lib/sample_interfaces/sample_interfaces_node | grep sample_interfaces || exit 1
+          echo "✓ Typesupport libraries linked correctly"
         shell: bash
 
       - name: check installed files
