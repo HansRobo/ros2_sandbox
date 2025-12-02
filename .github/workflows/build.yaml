@@ -1,4 +1,4 @@
-name: build test(merge install)
+name: build test
 
 on:
   workflow_dispatch:
@@ -6,7 +6,7 @@ on:
 
 jobs:
   job:
-    name: build_with_merge_install
+    name: build
     runs-on: ubuntu-latest
     timeout-minutes: 30
     container: ros:${{ matrix.rosdistro }}
@@ -15,8 +15,8 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        ament_cmake_auto_branch: [rolling, patch-1, before_fix_ament_export_include_directories]
         rosdistro: [rolling]
+        rosidl_branch: [feature/rosidl_auto_generate_interfaces]
     steps:
       - name: suppress warnings
         run: |
@@ -26,14 +26,9 @@ jobs:
 
       - uses: actions/checkout@v4
         with:
-          repository: HansRobo/ament_cmake
-          path: ament_cmake
-          ref: ${{ matrix.ament_cmake_auto_branch }}
-
-      - name: Install wget
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y wget libcpprest-dev tree
+          repository: HansRobo/rosidl
+          path: rosidl
+          ref: ${{ matrix.rosidl_branch }}
 
       - name: Run rosdep install
         run: |
@@ -51,11 +46,29 @@ jobs:
       - name: Build
         run: |
           . /opt/ros/${{ matrix.rosdistro }}/setup.sh
-          colcon build --merge-install
+          colcon build --event-handlers console_direct+
         shell: bash
 
-      - name: check installed files
-        if: always()
+      - name: Verify sample_interfaces generated files
         run: |
-          tree ./install
+          echo "Checking generated header files..."
+          ls -lh build/sample_interfaces/rosidl_generator_cpp/sample_interfaces/msg/
+          echo ""
+          echo "Expected files: test.hpp, test_a.hpp, test_b.hpp"
+          test -f build/sample_interfaces/rosidl_generator_cpp/sample_interfaces/msg/test.hpp
+          test -f build/sample_interfaces/rosidl_generator_cpp/sample_interfaces/msg/test_a.hpp
+          test -f build/sample_interfaces/rosidl_generator_cpp/sample_interfaces/msg/test_b.hpp
+          echo "✓ All header files generated successfully"
+        shell: bash
+
+      - name: Verify sample_interfaces executables
+        run: |
+          echo "Checking built executables..."
+          ls -lh install/sample_interfaces/lib/sample_interfaces/
+          echo ""
+          echo "Verifying executables exist..."
+          test -f install/sample_interfaces/lib/sample_interfaces/sample_interfaces_node
+          test -f install/sample_interfaces/lib/sample_interfaces/sample_interfaces_node2
+          test -f install/sample_interfaces/lib/sample_interfaces/sample_interfaces_node_no_targets
+          echo "✓ All executables built successfully"
         shell: bash
