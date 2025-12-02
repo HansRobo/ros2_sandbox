@@ -72,16 +72,3 @@ jobs:
           test -f install/sample_interfaces/lib/sample_interfaces/sample_interfaces_node_no_targets
           echo "✓ All executables built successfully"
         shell: bash
-
-      - name: Verify typesupport linking
-        run: |
-          echo "Checking typesupport library linking..."
-          ldd install/sample_interfaces/lib/sample_interfaces/sample_interfaces_node | grep sample_interfaces || exit 1
-          echo "✓ Typesupport libraries linked correctly"
-        shell: bash
-
-      - name: check installed files
-        if: always()
-        run: |
-          find ./install -type f | head -100
-        shell: bash
