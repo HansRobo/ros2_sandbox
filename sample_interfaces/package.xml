@@ -10,8 +10,10 @@
   <buildtool_depend>ament_cmake_auto</buildtool_depend>
   <buildtool_depend>rosidl_cmake</buildtool_depend>
   <buildtool_depend>rosidl_default_generators</buildtool_depend>
+  <buildtool_depend>rosidl_generator_validated_cpp</buildtool_depend>
 
   <exec_depend>rosidl_default_runtime</exec_depend>
+  <exec_depend>rosidl_generator_validated_cpp</exec_depend>
 
   <depend>rclcpp</depend>
 

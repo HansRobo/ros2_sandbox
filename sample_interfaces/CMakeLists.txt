@@ -9,19 +9,41 @@ if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
   add_compile_options(-Wall -Wextra -Wpedantic -g)
 endif()
 
-find_package(ament_cmake_auto REQUIRED)
-find_package(rosidl_cmake REQUIRED)
+find_package(ament_cmake REQUIRED)
 find_package(rosidl_default_generators REQUIRED)
-ament_auto_find_build_dependencies()
+find_package(rosidl_generator_validated_cpp REQUIRED)
+find_package(rclcpp REQUIRED)
 
-ament_auto_add_executable(${PROJECT_NAME}_node src/node.cpp)
-ament_auto_add_executable(${PROJECT_NAME}_node2 src/node.cpp)
-ament_auto_add_executable(${PROJECT_NAME}_node_no_targets src/node_no_targets.cpp)
-
-rosidl_auto_generate_interfaces(TARGETS ${PROJECT_NAME}_node ${PROJECT_NAME}_node2)
-
-target_link_libraries(${PROJECT_NAME}_node_no_targets
-  ${PROJECT_NAME}__rosidl_typesupport_cpp
+# Generate interfaces from msg and idl files
+rosidl_generate_interfaces(${PROJECT_NAME}
+  "msg/Test.msg"
+  "msg/TestA.msg"
+  "msg/TestB.msg"
+  "msg/SensorData.idl"
 )
 
-ament_auto_package()
+# Build executables
+add_executable(${PROJECT_NAME}_node src/node.cpp)
+ament_target_dependencies(${PROJECT_NAME}_node rclcpp)
+
+add_executable(${PROJECT_NAME}_node2 src/node.cpp)
+ament_target_dependencies(${PROJECT_NAME}_node2 rclcpp)
+
+add_executable(${PROJECT_NAME}_node_no_targets src/node_no_targets.cpp)
+ament_target_dependencies(${PROJECT_NAME}_node_no_targets rclcpp)
+
+# Link generated interfaces to executables
+rosidl_get_typesupport_target(cpp_typesupport_target ${PROJECT_NAME} "rosidl_typesupport_cpp")
+target_link_libraries(${PROJECT_NAME}_node ${cpp_typesupport_target})
+target_link_libraries(${PROJECT_NAME}_node2 ${cpp_typesupport_target})
+target_link_libraries(${PROJECT_NAME}_node_no_targets ${cpp_typesupport_target})
+
+# Install executables
+install(TARGETS
+  ${PROJECT_NAME}_node
+  ${PROJECT_NAME}_node2
+  ${PROJECT_NAME}_node_no_targets
+  DESTINATION lib/${PROJECT_NAME}
+)
+
+ament_package()

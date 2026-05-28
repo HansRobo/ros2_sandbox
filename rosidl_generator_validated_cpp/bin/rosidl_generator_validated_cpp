@@ -1,0 +1,29 @@
+#!/usr/bin/env python3
+
+import argparse
+import sys
+
+from rosidl_generator_validated_cpp import generate_validated_cpp
+
+
+def main():
+    parser = argparse.ArgumentParser(
+        description='Generate validated C++ type adapters from ROS interfaces.')
+    parser.add_argument(
+        '--generator-arguments-file',
+        required=True,
+        help='The path to the generator arguments file')
+    args = parser.parse_args()
+
+    try:
+        generate_validated_cpp(args.generator_arguments_file)
+        return 0
+    except Exception as e:
+        print(f'Error: {e}', file=sys.stderr)
+        import traceback
+        traceback.print_exc()
+        return 1
+
+
+if __name__ == '__main__':
+    sys.exit(main())

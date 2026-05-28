@@ -1,0 +1,25 @@
+// SensorData.idl - Sensor data message with validation annotations
+
+module sample_interfaces {
+  module msg {
+    struct SensorData {
+      @range(min=-40.0, max=85.0) @unit(value="celsius")
+      double temperature;
+
+      @range(min=0.0, max=100.0) @unit(value="percent")
+      double humidity;
+
+      @range(min=3.0, max=4.2) @unit(value="volt")
+      double battery_voltage;
+
+      @min(value=1)
+      uint32 sensor_id;
+
+      @range(min=0, max=255)
+      uint8 status_code;
+
+      uint64 timestamp_ns;
+      string description;
+    };
+  };
+};
