@@ -15,7 +15,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        rosdistro: [rolling]
+        rosdistro: [kilted]
         rosidl_branch: [feature/rosidl_auto_generate_interfaces]
     steps:
       - name: suppress warnings
